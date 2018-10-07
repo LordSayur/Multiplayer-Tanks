@@ -36,10 +36,6 @@ public class Bullet : NetworkBehaviour {
 
         StartCoroutine("SelfDestruct");
 	}
-	
-	void Update () {
-		
-	}
 
     private void OnCollisionEnter(Collision collision)
     {
