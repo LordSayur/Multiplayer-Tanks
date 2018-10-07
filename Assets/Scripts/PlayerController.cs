@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(PlayerHealth))]
 [RequireComponent(typeof(PlayerMotor))]
 [RequireComponent(typeof(PlayerSetup))]
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour
+{
 
     PlayerHealth m_pHealth;
     PlayerMotor m_pMotor;
@@ -23,6 +24,10 @@ public class PlayerController : MonoBehaviour {
 	
 	void Update ()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         Vector3 inputDirection = GetInput();
         if (inputDirection.sqrMagnitude > 0.25f)
         {
@@ -35,6 +40,10 @@ public class PlayerController : MonoBehaviour {
 
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         Vector3 inputDirection = GetInput();
         m_pMotor.MovePlayer(inputDirection);
     }
