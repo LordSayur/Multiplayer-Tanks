@@ -15,7 +15,17 @@ public class PlayerController : NetworkBehaviour
     PlayerSetup m_pSetup;
     PlayerShoot m_pShoot;
 
-	void Start () {
+    Vector3 m_originalPosition;
+    NetworkStartPosition[] m_spawnPoints;
+    public GameObject m_spawnFX;
+
+    public override void OnStartLocalPlayer()
+    {
+        m_originalPosition = transform.position;
+        m_spawnPoints = FindObjectsOfType<NetworkStartPosition>();
+    }
+
+    void Start () {
         m_pHealth = GetComponent<PlayerHealth>();
         m_pMotor = GetComponent<PlayerMotor>();
         m_pSetup = GetComponent<PlayerSetup>();
@@ -24,10 +34,16 @@ public class PlayerController : NetworkBehaviour
 	
 	void Update ()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer || m_pHealth.m_isDead)
         {
             return;
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            m_pShoot.Shoot();
+        }
+
         Vector3 inputDirection = GetInput();
         if (inputDirection.sqrMagnitude > 0.25f)
         {
@@ -40,7 +56,7 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer || m_pHealth.m_isDead)
         {
             return;
         }
@@ -55,5 +71,35 @@ public class PlayerController : NetworkBehaviour
         return new Vector3(h, 0, v);
     }
 
+    private void Disable()
+    {
+        StartCoroutine("RespawnRoutine");
+    }
 
+    IEnumerator RespawnRoutine()
+    {
+        transform.position = GetRandomSpawnPoint();
+        m_pMotor.m_rigidbody.velocity = Vector3.zero;
+        yield return new WaitForSeconds(3f);
+        m_pHealth.Reset();
+
+        if (m_spawnFX != null)
+        {
+            GameObject spawnFX = Instantiate(m_spawnFX, transform.position + Vector3.up * 0.5f, Quaternion.identity) as GameObject;
+            Destroy(spawnFX, 3f);
+        }
+    }
+
+    Vector3 GetRandomSpawnPoint()
+    {
+        if (m_spawnPoints != null)
+        {
+            if (m_spawnPoints.Length > 0)
+            {
+                NetworkStartPosition startPosition = m_spawnPoints[Random.Range(0, m_spawnPoints.Length)];
+                return startPosition.transform.position;
+            }
+        }
+        return m_originalPosition;
+    }
 }
