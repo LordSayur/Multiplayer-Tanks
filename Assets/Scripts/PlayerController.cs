@@ -19,6 +19,8 @@ public class PlayerController : NetworkBehaviour
     NetworkStartPosition[] m_spawnPoints;
     public GameObject m_spawnFX;
 
+    public int m_score;
+
     public override void OnStartLocalPlayer()
     {
         m_originalPosition = transform.position;
