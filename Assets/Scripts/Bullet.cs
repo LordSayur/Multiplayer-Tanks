@@ -28,6 +28,8 @@ public class Bullet : NetworkBehaviour {
 
     public float m_damage = 1f;
 
+    public PlayerController m_owner;
+
 	void Start () 
     {
         m_allParticles = GetComponentsInChildren<ParticleSystem>().ToList();
@@ -103,7 +105,7 @@ public class Bullet : NetworkBehaviour {
             PlayerHealth playerHealth = collision.gameObject.GetComponentInParent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.Damage(m_damage);
+                playerHealth.Damage(m_damage, m_owner);
             }
         }
     }

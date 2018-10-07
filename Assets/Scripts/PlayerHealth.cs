@@ -16,6 +16,8 @@ public class PlayerHealth : NetworkBehaviour
     [SyncVar]
     public bool m_isDead = false;
 
+    public PlayerController m_lastAttacker;
+
 	void Start () 
     {
         Reset();
@@ -41,17 +43,29 @@ public class PlayerHealth : NetworkBehaviour
         m_healthBar.sizeDelta = new Vector2(value / m_maxHealth * 150f, m_healthBar.sizeDelta.y);
     }
 
-    public void Damage(float damage)
+    public void Damage(float damage, PlayerController pc = null)
     {
         if (!isServer)
         {
             return;
         }
+
+        if (pc != null && pc != this.GetComponent<PlayerController>())
+        {
+            m_lastAttacker = pc;
+        }
+
         m_currentHealth-= damage;
         //UpdateHealthBar(m_currentHealth);
 
-        if (m_currentHealth <= 0)
+        if (m_currentHealth <= 0 && !m_isDead)
         {
+            if (m_lastAttacker != null)
+            {
+                m_lastAttacker.m_score++;
+                m_lastAttacker = null;
+            }
+            Game.Instance.UpdateScoreboard();
             m_isDead = true;
             RpcDie();
         }

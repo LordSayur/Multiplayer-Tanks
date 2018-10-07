@@ -401,6 +401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_spawnFX: {fileID: 118206, guid: 49cea2316ec6a41589509c0e782d9213, type: 2}
+  m_score: 0
 --- !u!114 &114100478755584466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -476,6 +477,7 @@ MonoBehaviour:
   m_deathPrefab: {fileID: 140182, guid: ead306b39f6b0428fa246bfff7d603ff, type: 2}
   m_healthBar: {fileID: 224135196333647804}
   m_isDead: 0
+  m_lastAttacker: {fileID: 0}
 --- !u!114 &114305625458850744
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -594,12 +596,12 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 70
+    m_Font: {fileID: 12800000, guid: f4745ba415b141640b70de7ff2399a27, type: 3}
+    m_FontSize: 120
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 5
-    m_MaxSize: 105
+    m_MinSize: 1
+    m_MaxSize: 144
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1

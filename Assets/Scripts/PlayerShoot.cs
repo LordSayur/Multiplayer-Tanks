@@ -47,13 +47,16 @@ public class PlayerShoot : NetworkBehaviour
     private void CmdShoot()
     {
         Bullet bullet = null;
-        bullet = m_bulletPrefab.GetComponent<Bullet>();
+        //bullet = m_bulletPrefab.GetComponent<Bullet>();
 
         Rigidbody rbody = Instantiate(m_bulletPrefab, m_bulletSpawn.position, m_bulletSpawn.rotation) as Rigidbody;
-
-        rbody.velocity = bullet.m_speed * m_bulletSpawn.transform.forward;
-
-        NetworkServer.Spawn(rbody.gameObject);
+        bullet = rbody.gameObject.GetComponent<Bullet>();
+        if (rbody != null)
+        {
+            rbody.velocity = bullet.m_speed * m_bulletSpawn.transform.forward;
+            bullet.m_owner = GetComponent<PlayerController>();
+            NetworkServer.Spawn(rbody.gameObject);
+        }
     }
 
     IEnumerator Reload()
